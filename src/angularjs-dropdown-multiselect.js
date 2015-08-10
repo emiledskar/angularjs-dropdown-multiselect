@@ -255,6 +255,7 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
 
                 $scope.setSelectedItem = function (id, dontRemove) {
                     
+                    // test
                     // if($scope.settings.closeOnSelect)
                     //     $scope.toggleDropdown();
                     
