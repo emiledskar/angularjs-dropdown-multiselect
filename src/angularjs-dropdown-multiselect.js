@@ -254,8 +254,9 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                 };
 
                 $scope.setSelectedItem = function (id, dontRemove) {
-                    if($scope.settings.closeOnSelect)
-                        $scope.toggleDropdown();    
+                    
+                    // if($scope.settings.closeOnSelect)
+                    //     $scope.toggleDropdown();
                     
                     
                     var findObj = getFindObj(id);
@@ -286,6 +287,7 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                         $scope.selectedModel.push(finalObj);
                         $scope.externalEvents.onItemSelect(finalObj);
                     }
+                    $scope.open = $scope.settings.closeOnSelect ? false : true;
                 };
 
                 $scope.isChecked = function (id) {
