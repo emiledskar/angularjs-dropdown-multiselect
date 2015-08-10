@@ -42,7 +42,7 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                 if (box === 'check') {
                     template += '<div class="checkbox"><label><input class="checkboxInput" type="checkbox" ng-click="checkboxClick($event, getPropertyForObject(option,settings.idProp))" ng-checked="isChecked(getPropertyForObject(option,settings.idProp))" /> {{getPropertyForObject(option, settings.displayProp)}}</label></div></a>';
                 } else if(box === 'radio') {
-                    template += '<div class="radio"><label><input class="radioInput" type="radio" ng-click="checkboxClick($event, getPropertyForObject(option,settings.idProp))" ng-checked="isChecked(getPropertyForObject(option,settings.idProp))" /> {{getPropertyForObject(option, settings.displayProp)}}</label></div></a>';
+                    template += '<div class="radio"><label><input class="radioInput" type="radio" ng-click="radioClick($event, getPropertyForObject(option,settings.idProp))" ng-checked="isChecked(getPropertyForObject(option,settings.idProp))" /> {{getPropertyForObject(option, settings.displayProp)}}</label></div></a>';
                 } else {
                     template += '{{getPropertyForObject(option, settings.displayProp)}}</a>';
                 }
@@ -65,6 +65,11 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                 };
 
                 $scope.checkboxClick = function ($event, id) {
+                    $scope.setSelectedItem(id);
+                    $event.stopImmediatePropagation();
+                };
+
+                $scope.radioClick = function ($event, id) {
                     $scope.setSelectedItem(id);
                     $event.stopImmediatePropagation();
                 };
@@ -120,11 +125,9 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                     });
                 }
 
-                console.log($scope.translationTexts);
                 angular.extend($scope.settings, $scope.extraSettings || []);
                 angular.extend($scope.externalEvents, $scope.events || []);
                 angular.extend($scope.texts, $scope.translationTexts);
-                console.log($scope.texts);
 
                 $scope.singleSelection = $scope.settings.selectionLimit === 1;
 
