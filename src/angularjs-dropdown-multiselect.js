@@ -102,11 +102,12 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                 $scope.texts = {
                     checkAll: 'Check All',
                     uncheckAll: 'Uncheck All',
-                    selectionCount: 'valda',
+                    selectionCount: 'checked',
                     selectionOf: '/',
                     searchPlaceholder: 'Search...',
-                    buttonDefaultText: 'Ingen vald',
-                    dynamicButtonTextSuffix: 'valda'
+                    buttonDefaultText: 'Select',
+                    dynamicButtonTextSuffix: 'checked',
+                    allSelected: 'All'
                 };
 
                 $scope.searchFilter = $scope.searchFilter || '';
@@ -119,9 +120,11 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                     });
                 }
 
+                console.log($scope.translationTexts);
                 angular.extend($scope.settings, $scope.extraSettings || []);
                 angular.extend($scope.externalEvents, $scope.events || []);
                 angular.extend($scope.texts, $scope.translationTexts);
+                console.log($scope.texts);
 
                 $scope.singleSelection = $scope.settings.selectionLimit === 1;
 
@@ -211,7 +214,7 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                             if (totalSelected === 0) {
                                 return $scope.texts.buttonDefaultText;
                             } else if (totalSelected === $scope.options.length){
-                                return 'Alla';
+                                return $scope.texts.allSelected;
                             } else {
                                 return totalSelected + ' ' + $scope.texts.dynamicButtonTextSuffix;
                             }
@@ -254,12 +257,10 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                 };
 
                 $scope.setSelectedItem = function (id, dontRemove) {
-                    
-                    // test
-                    // if($scope.settings.closeOnSelect)
-                    //     $scope.toggleDropdown();
-                    
-                    
+
+                    // Closing dropdown
+                    $scope.open = $scope.settings.closeOnSelect ? false : true;
+
                     var findObj = getFindObj(id);
                     var finalObj = null;
 
@@ -288,7 +289,7 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                         $scope.selectedModel.push(finalObj);
                         $scope.externalEvents.onItemSelect(finalObj);
                     }
-                    $scope.open = $scope.settings.closeOnSelect ? false : true;
+
                 };
 
                 $scope.isChecked = function (id) {
