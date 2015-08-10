@@ -17,6 +17,7 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                 groupBy: '@'
             },
             template: function (element, attrs) {
+                console.log("test");
                 var checkboxes = attrs.checkboxes ? true : false;
                 var groups = attrs.groupBy ? true : false;
 
