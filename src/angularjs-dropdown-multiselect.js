@@ -17,7 +17,8 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                 groupBy: '@'
             },
             template: function (element, attrs) {
-                var checkboxes = attrs.checkboxes ? true : false;
+                var checkboxes = attrs.checkboxes;
+                // var checkboxes = attrs.checkboxes ? true : false;
                 var groups = attrs.groupBy ? true : false;
 
                 var template = '<div class="multiselect-parent btn-group dropdown-multiselect">';
@@ -38,8 +39,10 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
 
                 template += '<a role="menuitem" tabindex="-1" ng-click="setSelectedItem(getPropertyForObject(option,settings.idProp))">';
 
-                if (checkboxes) {
+                if (checkboxes === 'check' ) {
                     template += '<div class="checkbox" ng-click="checkboxClick($event,getPropertyForObject(option,settings.idProp), option)"><input class="checkboxInput" type="checkbox" ng-click="checkboxClick($event, getPropertyForObject(option,settings.idProp), option)" ng-checked="isChecked(getPropertyForObject(option,settings.idProp))" /><label>{{getPropertyForObject(option, settings.displayProp)}}</label></div></a>';
+                } else if(checkboxes === 'radio') {
+                    template += '<div class="radio" ng-click="checkboxClick($event,getPropertyForObject(option,settings.idProp), option)"><input class="radioInput" type="radio" ng-click="checkboxClick($event, getPropertyForObject(option,settings.idProp), option)" ng-checked="isChecked(getPropertyForObject(option,settings.idProp))" /><label>{{getPropertyForObject(option, settings.displayProp)}}</label></div></a>';
                 } else {
                     template += '<span data-ng-class="{\'glyphicon glyphicon-ok\': isChecked(getPropertyForObject(option,settings.idProp))}"></span> {{getPropertyForObject(option, settings.displayProp)}}</a>';
                 }
@@ -63,8 +66,6 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
 
                 $scope.checkboxClick = function ($event, id, option) {
                     var e = $scope.getPropertyForObject($scope.options[id], $scope.settings.groupBy);
-                    console.log("group?");
-                    console.log(e);
                     $scope.categorySelected = null;
                     $event.stopImmediatePropagation();
                     $scope.setSelectedItem(id);
@@ -245,6 +246,14 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
 
                             if (totalSelected === 0) {
                                 return $scope.texts.buttonDefaultText;
+                            } else if(totalSelected === 1) {
+                                for(var i=0; i<$scope.options.length; i++){
+                                    if ($scope.isChecked($scope.getPropertyForObject($scope.options[i], $scope.settings.idProp))) {
+                                        return $scope.options[i].label
+                                    }
+                                }
+                            } else if( totalSelected === $scope.options.length){
+                                return 'Alla';
                             } else {
                                 return totalSelected + ' ' + $scope.texts.dynamicButtonTextSuffix;
                             }
@@ -299,6 +308,7 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                         clearObject($scope.selectedModel);
                         angular.extend($scope.selectedModel, finalObj);
                         $scope.externalEvents.onItemSelect(finalObj);
+                        if ($scope.settings.closeOnSelect) $scope.open = false;
 
                         return;
                     }
