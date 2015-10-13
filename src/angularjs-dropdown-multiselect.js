@@ -31,7 +31,7 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                 template += '<li ng-show="settings.enableSearch" class="divider"></li>';
 
                 if (groups) {
-                    template += '<li ng-repeat-start="option in orderedItems | filter: searchFilter" ng-show="getPropertyForObject(option, settings.groupBy) !== getPropertyForObject(orderedItems[$index - 1], settings.groupBy)" role="presentation" class="dropdown-header" ng-click="selectSubgroup(options, getPropertyForObject(option, settings.groupBy));">{{ getGroupTitle(getPropertyForObject(option, settings.groupBy)) }}</li>';
+                    template += '<li ng-repeat-start="option in orderedItems | filter: searchFilter" ng-show="getPropertyForObject(option, settings.groupBy) !== getPropertyForObject(orderedItems[$index - 1], settings.groupBy)" role="presentation" class="dropdown-header" ng-click="selectSubgroup(options, getPropertyForObject(option, settings.groupBy));"><input class="checkboxInput" type="checkbox" ng-click="checkboxClick($event, getPropertyForObject(option,settings.idProp), option)" ng-checked="isChecked(getPropertyForObject(option,settings.idProp))" /><label>{{ getGroupTitle(getPropertyForObject(option, settings.groupBy)) }}</label></li>';
                     template += '<li ng-repeat-end role="presentation">';
                 } else {
                     template += '<li role="presentation" ng-repeat="option in options | filter: searchFilter">';
